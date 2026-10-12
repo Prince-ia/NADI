@@ -254,12 +254,12 @@ h3 {
 .hero {
   display: grid;
   width: var(--container);
-  min-height: calc(100vh - 84px);
+  min-height: auto;
   grid-template-columns: 1.02fr 0.98fr;
   align-items: center;
   gap: 6vw;
   margin: auto;
-  padding: 70px 0 88px;
+  padding: 40px 0 72px;
 }
 
 .hero-copy {
@@ -314,12 +314,12 @@ h3 {
 
 .hero-visual {
   position: relative;
-  min-height: 620px;
+  min-height: clamp(540px, 66vh, 700px);
   animation: hero-visual-in 950ms 100ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-visual img {
-  height: 620px;
+  height: clamp(540px, 66vh, 700px);
   object-fit: cover;
   object-position: center;
 }
@@ -2092,7 +2092,7 @@ button:focus-visible {
 /* --- Ticker (bandeau défilant) --- */
 .ticker {
   overflow: hidden;
-  padding: 17px 0;
+  padding: 14px 0;
   border-block: 1px solid rgb(200 154 36 / 26%);
   background: var(--ink);
 }
@@ -2116,7 +2116,8 @@ button:focus-visible {
   padding-right: 46px;
   color: var(--gold-light);
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 16px;
+  line-height: 1.4;
   white-space: nowrap;
 }
 
