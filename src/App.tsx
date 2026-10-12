@@ -649,11 +649,11 @@ function NewsGrid({
 function Home({ navigate }: { navigate: (page: Page) => void }) {
   return (
     <>
+      <Ticker />
       <Hero navigate={navigate} />
       <Mission />
       <Approach />
       <LeaderFeature navigate={navigate} />
-      <Ticker />
       <ActivityCarousel />
       <Actions navigate={navigate} />
       <Vision navigate={navigate} />
