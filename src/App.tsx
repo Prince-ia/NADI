@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { FormEvent, ReactNode } from "react"
 import { contact, languages, useI18n } from "./i18n"
-import type { Content } from "./i18n"
+import type { Content, Lang } from "./i18n"
 
 type Page =
   | "home"
@@ -61,8 +61,8 @@ const portfolioImageList = [
 ]
 
 const responsableImages = [
-  "media/responsable-1.jpg",
   "media/responsable-2.jpg",
+  "media/responsable-1.jpg",
   "media/responsable-3.jpg",
 ]
 
@@ -97,22 +97,20 @@ function Brand({ light = false }: { light?: boolean }) {
 }
 
 function LanguageSwitcher() {
-  const { lang, setLang } = useI18n()
+  const { lang, setLang, c } = useI18n()
   return (
-    <div className="lang-switch" role="group" aria-label="Language">
+    <select
+      className="lang-select"
+      value={lang}
+      onChange={(event) => setLang(event.target.value as Lang)}
+      aria-label={c.misc.langLabel}
+    >
       {languages.map((item) => (
-        <button
-          key={item.code}
-          type="button"
-          className={lang === item.code ? "active" : ""}
-          onClick={() => setLang(item.code)}
-          aria-pressed={lang === item.code}
-          title={item.label}
-        >
-          {item.short}
-        </button>
+        <option key={item.code} value={item.code}>
+          {item.label}
+        </option>
       ))}
-    </div>
+    </select>
   )
 }
 
@@ -256,9 +254,6 @@ function Header({
               {c.nav[page.key]}
             </a>
           ))}
-          <Button href="#/contact" onClick={() => navigate("contact")}>
-            {c.header.collaborate}
-          </Button>
           <LanguageSwitcher />
         </nav>
         <button
@@ -652,6 +647,7 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
       <Mission />
       <Approach />
       <LeaderFeature navigate={navigate} />
+      <Realisation />
       <Ticker />
       <ActivityCarousel />
       <Actions navigate={navigate} />
@@ -670,6 +666,8 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
         </div>
         <NewsGrid navigate={navigate} limit={3} filter="all" />
       </section>
+      <LeaderFeature navigate={navigate} />
+      <Realisation />
       <FinalCta navigate={navigate} />
     </>
   )
@@ -728,7 +726,6 @@ function AboutPage({ navigate }: { navigate: (page: Page) => void }) {
           ))}
         </div>
       </section>
-      <Realisation />
       <FinalCta navigate={navigate} />
     </>
   )

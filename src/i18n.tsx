@@ -403,14 +403,14 @@ const fr = {
     ],
   },
   realisation: {
-    eyebrow: "Conception & réalisation",
-    title: "Un site pensé et développé par ATF.",
+    eyebrow: "Design & development",
+    title: "Un partenaire technique : ATF.",
     intro:
-      "La conception éditoriale, le design et le développement de cette plateforme ont été assurés par ATF, l’agence digitale en charge de la présence en ligne de NADI.",
+      "ATF accompagne NADI en apportant une direction technique et une expertise digitale au service de l’initiative.",
     name: "LAWSON Prince",
     role: "Directeur technique & Développement digital · ATF",
-    note: "De la première esquisse à la mise en ligne, chaque détail a été pensé pour refléter l’ambition panafricaine de NADI.",
-    imageAlt: "LAWSON Prince, directeur technique d’ATF, développeur du site NADI",
+    note: "Animé par la rigueur et le sens de l’objectif, LAWSON Prince met son savoir-faire au service des ambitions de NADI.",
+    imageAlt: "LAWSON Prince, directeur technique d’ATF, partenaire technique de NADI",
   },
   intro: { skip: "Entrer sur le site" },
   misc: {
@@ -805,13 +805,13 @@ const en: Content = {
   },
   realisation: {
     eyebrow: "Design & development",
-    title: "A website designed and developed by ATF.",
+    title: "A technical partner: ATF.",
     intro:
-      "The editorial design, the visual identity and the development of this platform were carried out by ATF, the digital agency in charge of NADI’s online presence.",
+      "ATF works alongside NADI to provide technical direction and digital expertise in support of the initiative.",
     name: "LAWSON Prince",
     role: "Technical Director & Digital Development · ATF",
-    note: "From the first sketch to going live, every detail was designed to reflect NADI’s pan-African ambition.",
-    imageAlt: "LAWSON Prince, technical director at ATF, developer of the NADI website",
+    note: "Driven by precision and purpose, LAWSON Prince contributes his expertise to help NADI reach its objectives.",
+    imageAlt: "LAWSON Prince, technical director at ATF, NADI technical partner",
   },
   intro: { skip: "Enter the website" },
   misc: {
@@ -1203,14 +1203,14 @@ const es: Content = {
     ],
   },
   realisation: {
-    eyebrow: "Concepción y realización",
-    title: "Un sitio pensado y desarrollado por ATF.",
+    eyebrow: "Diseño y desarrollo",
+    title: "Un socio técnico: ATF.",
     intro:
-      "La concepción editorial, el diseño y el desarrollo de esta plataforma han sido realizados por ATF, la agencia digital encargada de la presencia en línea de NADI.",
+      "ATF acompaña a NADI aportando dirección técnica y experiencia digital al servicio de la iniciativa.",
     name: "LAWSON Prince",
-    role: "Director técnico y de Desarrollo digital · ATF",
-    note: "Desde el primer boceto hasta la publicación, cada detalle ha sido pensado para reflejar la ambición panafricana de NADI.",
-    imageAlt: "LAWSON Prince, director técnico de ATF, desarrollador del sitio NADI",
+    role: "Director técnico y Desarrollo digital · ATF",
+    note: "Guiado por la precisión y el objetivo, LAWSON Prince pone su experiencia al servicio de las ambiciones de NADI.",
+    imageAlt: "LAWSON Prince, director técnico de ATF, socio técnico de NADI",
   },
   intro: { skip: "Entrar en el sitio" },
   misc: {
@@ -1600,14 +1600,14 @@ const ee: Content = {
     ],
   },
   realisation: {
-    eyebrow: "Wɔwɔ kple dzidzigbɔɖiɖi",
-    title: "ATF ye da site sia ŋu eye wòwɔe.",
+    eyebrow: "Dɔwɔwɔ kple dzidzigbɔɖiɖi",
+    title: "Dɔwɔɖekae ƒe hadɔwɔla: ATF.",
     intro:
-      "ATF, dɔwɔƒe si kpɔa NADI ƒe dɔ le internet dzi, ye wɔ site sia ƒe nuŋlɔɖi, nɔnɔmetata kple dɔwɔwɔ.",
+      "ATF kpena ɖe NADI ŋu le mɔfiame kple digital nunya dzi le dɔ sia ƒe ŋuti.",
     name: "LAWSON Prince",
     role: "Technique ƒe Dzikpɔla & Digital Dɔwɔwɔ · ATF",
-    note: "Tso nɔnɔmetata gbãtɔ vaseɖe eƒe dɔdɔ ŋu la, wokpɔ nusianu ɖoɖo be wòaɖe NADI ƒe Afrika katã ƒe ɖoɖoɖomakpɔmakpɔ la fia.",
-    imageAlt: "LAWSON Prince, ATF ƒe technique dzikpɔla, site NADI ƒe dɔwɔla",
+    note: "LAWSON Prince tsɔa eƒe nunya ɖoa NADI ƒe ɖoɖoɖomakpɔmakpɔwo ŋu.",
+    imageAlt: "LAWSON Prince, ATF ƒe technique dzikpɔla, NADI ƒe hadɔwɔla",
   },
   intro: { skip: "Ge ɖe site la me" },
   misc: {
@@ -1633,7 +1633,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
     const stored = window.localStorage.getItem("nadi-lang") as Lang | null
     return stored && languages.some((item) => item.code === stored)
       ? stored
-      : "fr"
+      : "en"
   })
 
   useEffect(() => {
