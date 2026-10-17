@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { FormEvent, ReactNode } from "react"
+import { contact, languages, useI18n } from "./i18n"
+import type { Content } from "./i18n"
 
 type Page =
   | "home"
@@ -9,6 +11,18 @@ type Page =
   | "portfolio"
   | "news"
   | "contact"
+
+const pageOrder: { id: Page; key: keyof Content["nav"] }[] = [
+  { id: "home", key: "home" },
+  { id: "about", key: "about" },
+  { id: "actions", key: "actions" },
+  { id: "leadership", key: "leadership" },
+  { id: "portfolio", key: "portfolio" },
+  { id: "news", key: "news" },
+  { id: "contact", key: "contact" },
+]
+
+const pageIds = pageOrder.map((page) => page.id)
 
 const media = {
   logo: "media/logo.png",
@@ -33,131 +47,23 @@ const activityImages = [
 const heroImage = activityImages[0]
 const articleImages = [activityImages[1], activityImages[2], activityImages[3]]
 
-const pages: { id: Page; label: string }[] = [
-  { id: "home", label: "Accueil" },
-  { id: "about", label: "À propos" },
-  { id: "actions", label: "Nos axes d’action" },
-  { id: "leadership", label: "Notre vision" },
-  { id: "portfolio", label: "Portfolio" },
-  { id: "news", label: "Actualités" },
-  { id: "contact", label: "Contact" },
+const actionImages = [articleImages[0], articleImages[1], articleImages[2]]
+const activityImageList = [
+  activityImages[4],
+  activityImages[5],
+  activityImages[6],
+  activityImages[7],
+]
+const portfolioImageList = [
+  activityImages[8],
+  activityImages[1],
+  activityImages[5],
 ]
 
-const pillars = [
-  {
-    number: "01",
-    title: "Développement économique",
-    text: "Mieux comprendre les dynamiques qui façonnent les économies africaines.",
-  },
-  {
-    number: "02",
-    title: "Leadership des jeunes",
-    text: "Faire émerger les voix, les talents et les ambitions d’une nouvelle génération.",
-  },
-  {
-    number: "03",
-    title: "Politiques publiques",
-    text: "Nourrir un dialogue constructif au service de décisions plus inclusives.",
-  },
-]
-
-const actionAreas = [
-  {
-    number: "I",
-    title: "Analyse économique",
-    text: "Encourager la réflexion, l’analyse et la compréhension des enjeux économiques qui influencent le développement de l’Afrique.",
-    image: articleImages[0],
-  },
-  {
-    number: "II",
-    title: "Dialogue sur les politiques publiques",
-    text: "Promouvoir les échanges constructifs, les idées et la participation aux réflexions sur les politiques publiques.",
-    image: articleImages[1],
-  },
-  {
-    number: "III",
-    title: "Autonomisation des jeunes",
-    text: "Valoriser le potentiel des jeunes, leur leadership et leur contribution aux transformations économiques et sociales.",
-    image: articleImages[2],
-  },
-]
-
-const articles = [
-  {
-    category: "Développement économique",
-    tag: "Économie",
-    title: "Comprendre les nouveaux moteurs de la croissance inclusive",
-    excerpt:
-      "Un espace éditorial pour décrypter les dynamiques économiques africaines.",
-    image: articleImages[0],
-  },
-  {
-    category: "Jeunesse et leadership",
-    tag: "Jeunesse",
-    title: "La jeunesse au cœur des transformations du continent",
-    excerpt:
-      "Perspectives sur l’engagement, l’initiative et le leadership de demain.",
-    image: articleImages[1],
-  },
-  {
-    category: "Politiques publiques",
-    tag: "Politiques publiques",
-    title: "Faire du dialogue une force de transformation",
-    excerpt:
-      "Regards croisés sur la participation et la fabrique de politiques inclusives.",
-    image: articleImages[2],
-  },
-]
-
-const activities = [
-  {
-    kicker: "Réflexion collective",
-    title: "Ateliers d’idées et d’innovation",
-    text: "Des formats participatifs pour croiser les expertises, faire émerger des perspectives et transformer les constats en pistes d’action.",
-    image: activityImages[4],
-  },
-  {
-    kicker: "Dialogue",
-    title: "Rencontres et conversations publiques",
-    text: "Des espaces exigeants et accessibles pour rapprocher les décideurs, les chercheurs, les entrepreneurs et la jeunesse.",
-    image: activityImages[5],
-  },
-  {
-    kicker: "Transmission",
-    title: "Leadership et montée en compétence",
-    text: "Des expériences pensées pour renforcer la confiance, la capacité d’initiative et le pouvoir d’agir des jeunes talents.",
-    image: activityImages[6],
-  },
-  {
-    kicker: "Rayonnement",
-    title: "Forums et rendez-vous panafricains",
-    text: "Des temps forts pour partager les connaissances et ouvrir de nouvelles possibilités de collaboration à l’échelle du continent.",
-    image: activityImages[7],
-  },
-]
-
-const portfolioItems = [
-  {
-    number: "01",
-    category: "Économie & innovation",
-    title: "Observatoire des opportunités africaines",
-    text: "Un concept de veille et d’analyse pour rendre les dynamiques économiques plus lisibles.",
-    image: activityImages[8],
-  },
-  {
-    number: "02",
-    category: "Jeunesse & leadership",
-    title: "NADI Next Generation Forum",
-    text: "Un format envisagé pour connecter les jeunes talents aux idées, outils et réseaux qui accélèrent leur impact.",
-    image: activityImages[1],
-  },
-  {
-    number: "03",
-    category: "Politiques publiques",
-    title: "Conversations pour l’Afrique",
-    text: "Une série éditoriale et événementielle imaginée pour nourrir un dialogue constructif et pluraliste.",
-    image: activityImages[5],
-  },
+const responsableImages = [
+  "media/responsable-1.jpg",
+  "media/responsable-2.jpg",
+  "media/responsable-3.jpg",
 ]
 
 function ArrowIcon() {
@@ -169,6 +75,7 @@ function ArrowIcon() {
 }
 
 function Brand({ light = false }: { light?: boolean }) {
+  const { c } = useI18n()
   return (
     <div className={`brand ${light ? "brand-light" : ""}`} aria-label="NADI">
       <img
@@ -181,15 +88,36 @@ function Brand({ light = false }: { light?: boolean }) {
       <span className="brand-name">NADI</span>
       <span className="brand-rule" />
       <span className="brand-full">
-        Novara Africa
+        {c.brand.line1}
         <br />
-        Development Initiative
+        {c.brand.line2}
       </span>
     </div>
   )
 }
 
+function LanguageSwitcher() {
+  const { lang, setLang } = useI18n()
+  return (
+    <div className="lang-switch" role="group" aria-label="Language">
+      {languages.map((item) => (
+        <button
+          key={item.code}
+          type="button"
+          className={lang === item.code ? "active" : ""}
+          onClick={() => setLang(item.code)}
+          aria-pressed={lang === item.code}
+          title={item.label}
+        >
+          {item.short}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 function IntroSplash({ onDone }: { onDone: () => void }) {
+  const { c } = useI18n()
   const [leaving, setLeaving] = useState(false)
   const finished = useRef(false)
 
@@ -217,7 +145,7 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
     <div
       className={`intro ${leaving ? "intro-leaving" : ""}`}
       role="dialog"
-      aria-label="Animation d’ouverture NADI"
+      aria-label="NADI"
     >
       <video
         className="intro-video"
@@ -231,7 +159,7 @@ function IntroSplash({ onDone }: { onDone: () => void }) {
         onError={finish}
       />
       <button className="intro-skip" onClick={finish} type="button">
-        Entrer sur le site
+        {c.intro.skip}
       </button>
     </div>
   )
@@ -286,6 +214,7 @@ function Header({
   currentPage: Page
   navigate: (page: Page) => void
 }) {
+  const { c } = useI18n()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -302,15 +231,15 @@ function Header({
         <button
           className="brand-button"
           onClick={() => navigate("home")}
-          aria-label="Accueil"
+          aria-label={c.nav.home}
         >
           <Brand />
         </button>
         <nav
           className={`nav ${open ? "nav-open" : ""}`}
-          aria-label="Navigation principale"
+          aria-label="Navigation"
         >
-          {pages.map((page) => (
+          {pageOrder.map((page) => (
             <a
               key={page.id}
               className={
@@ -324,17 +253,18 @@ function Header({
                 setOpen(false)
               }}
             >
-              {page.label}
+              {c.nav[page.key]}
             </a>
           ))}
           <Button href="#/contact" onClick={() => navigate("contact")}>
-            Collaborer avec NADI
+            {c.header.collaborate}
           </Button>
+          <LanguageSwitcher />
         </nav>
         <button
           className={`menu-toggle ${open ? "is-open" : ""}`}
           onClick={() => setOpen(!open)}
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={open ? "×" : "≡"}
           aria-expanded={open}
         >
           <span />
@@ -366,49 +296,49 @@ function SectionHeading({
 }
 
 function Hero({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="hero">
       <div className="hero-copy">
-        <p className="eyebrow">Novara Africa Development Initiative</p>
+        <p className="eyebrow">{c.hero.eyebrow}</p>
         <h1>
-          Accélérer le développement <em>inclusif</em> de l’Afrique.
+          {c.hero.titleBefore}
+          <em>{c.hero.titleEm}</em>
+          {c.hero.titleAfter}
         </h1>
-        <p className="hero-intro">
-          Nous connectons les idées, les personnes et les opportunités pour
-          contribuer à une Afrique plus inclusive, innovante et prospère.
-        </p>
+        <p className="hero-intro">{c.hero.intro}</p>
         <div className="button-row">
           <Button onClick={() => navigate("leadership")}>
-            Découvrir notre vision
+            {c.hero.primary}
           </Button>
           <Button variant="secondary" onClick={() => navigate("contact")}>
-            Rejoindre l’initiative
+            {c.hero.secondary}
           </Button>
         </div>
         <div className="hero-note">
-          <span>Une initiative panafricaine</span>
-          <span>Fondée par Fabrice Komlan Séna VIAGBO</span>
+          <span>{c.hero.noteLeft}</span>
+          <span>{c.hero.noteRight}</span>
         </div>
       </div>
       <div className="hero-visual">
         <img
           src={heroImage}
-          alt="Jeunes professionnels africains réunis autour de leurs ordinateurs"
+          alt={c.hero.imageAlt}
           loading="eager"
           decoding="async"
         />
         <div className="hero-quote">
           <span className="quote-mark">“</span>
-          <p>Transformer les idées en opportunités durables.</p>
+          <p>{c.hero.quote}</p>
         </div>
         <div className="gold-arc" />
       </div>
       <a
         className="hero-cue"
         href="#mission"
-        aria-label="Découvrir la mission de NADI"
+        aria-label={c.hero.cue}
       >
-        <span>Découvrir</span>
+        <span>{c.hero.cue}</span>
         <i />
       </a>
     </section>
@@ -416,23 +346,18 @@ function Hero({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function Mission() {
+  const { c } = useI18n()
   return (
     <section className="section mission" id="mission">
       <div className="mission-lead">
         <SectionHeading
-          eyebrow="Notre mission"
-          title="Une vision ambitieuse pour l’Afrique"
+          eyebrow={c.mission.eyebrow}
+          title={c.mission.title}
         />
-        <p>
-          NOVARA AFRICA DEVELOPMENT INITIATIVE est une initiative tournée vers
-          la promotion d’un développement africain inclusif. Elle entend
-          favoriser les échanges d’idées, l’engagement des jeunes et les
-          dynamiques de collaboration capables de contribuer à la transformation
-          du continent.
-        </p>
+        <p>{c.mission.text}</p>
       </div>
       <div className="pillar-grid">
-        {pillars.map((pillar) => (
+        {c.pillars.map((pillar) => (
           <article className="pillar-card" key={pillar.number}>
             <span className="pillar-number">{pillar.number}</span>
             <h3>{pillar.title}</h3>
@@ -446,38 +371,30 @@ function Mission() {
 }
 
 function LeaderFeature({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="leader-feature">
       <div className="leader-portrait">
         <img
           className="portrait-photo"
           src={media.founder}
-          alt="Portrait de Fabrice Komlan Séna VIAGBO, fondateur de NADI"
+          alt={c.leader.imageAlt}
           loading="lazy"
           decoding="async"
         />
         <div className="portrait-caption">
-          <strong>Fabrice Komlan Séna VIAGBO</strong>
-          <span>Fondateur · NADI</span>
+          <strong>{c.leader.name}</strong>
+          <span>{c.leader.role}</span>
         </div>
       </div>
       <div className="leader-copy">
-        <p className="eyebrow">Le leadership</p>
-        <h2>Un leadership tourné vers l’avenir de l’Afrique</h2>
-        <p>
-          Fabrice Komlan Séna VIAGBO est un jeune leader visionnaire
-          profondément engagé dans le développement de l’Afrique.
-        </p>
-        <p>
-          Ses centres d’intérêt portent notamment sur l’analyse économique, le
-          dialogue sur les politiques publiques et l’autonomisation des jeunes.
-        </p>
-        <p>
-          Il représente une nouvelle génération de leaders africains résolument
-          tournée vers l’action, l’innovation et l’impact.
-        </p>
+        <p className="eyebrow">{c.leader.eyebrow}</p>
+        <h2>{c.leader.title}</h2>
+        <p>{c.leader.p1}</p>
+        <p>{c.leader.p2}</p>
+        <p>{c.leader.p3}</p>
         <Button variant="text" onClick={() => navigate("leadership")}>
-          Découvrir notre engagement
+          {c.leader.cta}
         </Button>
       </div>
     </section>
@@ -485,22 +402,28 @@ function LeaderFeature({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function Actions({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="section actions-preview">
       <div className="section-topline">
         <SectionHeading
-          eyebrow="Nos axes d’action"
-          title="Réfléchir. Connecter. Agir."
+          eyebrow={c.actionsPreview.eyebrow}
+          title={c.actionsPreview.title}
         />
         <Button variant="text" onClick={() => navigate("actions")}>
-          Explorer tous nos axes
+          {c.actionsPreview.cta}
         </Button>
       </div>
       <div className="action-grid">
-        {actionAreas.map((area) => (
+        {c.actionAreas.map((area, index) => (
           <article className="action-card" key={area.number}>
             <div className="action-image">
-              <img src={area.image} alt="" loading="lazy" decoding="async" />
+              <img
+                src={actionImages[index]}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
               <span>{area.number}</span>
             </div>
             <h3>{area.title}</h3>
@@ -513,8 +436,10 @@ function Actions({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function ActivityCarousel() {
+  const { c } = useI18n()
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
+  const activities = c.activities.items
 
   useEffect(() => {
     if (
@@ -527,7 +452,7 @@ function ActivityCarousel() {
       5200,
     )
     return () => window.clearInterval(timer)
-  }, [paused])
+  }, [paused, activities.length])
 
   const previous = () =>
     setActive(
@@ -541,12 +466,12 @@ function ActivityCarousel() {
       className="activity-carousel"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      aria-roledescription="carrousel"
-      aria-label="Formats d’activités NADI"
+      aria-roledescription="carousel"
+      aria-label={c.activities.eyebrow}
     >
       <div className="carousel-copy">
         <div>
-          <p className="eyebrow">Nos activités</p>
+          <p className="eyebrow">{c.activities.eyebrow}</p>
           <span className="carousel-count">
             0{active + 1} <i /> 0{activities.length}
           </span>
@@ -555,10 +480,10 @@ function ActivityCarousel() {
           <p className="carousel-text">{activities[active].text}</p>
         </div>
         <div className="carousel-controls">
-          <button onClick={previous} aria-label="Activité précédente">
+          <button onClick={previous} aria-label={c.activities.previous}>
             <ArrowIcon />
           </button>
-          <button onClick={next} aria-label="Activité suivante">
+          <button onClick={next} aria-label={c.activities.next}>
             <ArrowIcon />
           </button>
         </div>
@@ -568,7 +493,7 @@ function ActivityCarousel() {
           <img
             key={activity.title}
             className={index === active ? "active" : ""}
-            src={activity.image}
+            src={activityImageList[index]}
             alt={index === active ? activity.title : ""}
             loading="lazy"
             decoding="async"
@@ -580,7 +505,7 @@ function ActivityCarousel() {
               key={activity.title}
               className={index === active ? "active" : ""}
               onClick={() => setActive(index)}
-              aria-label={`Afficher ${activity.title}`}
+              aria-label={activity.title}
             />
           ))}
         </div>
@@ -590,27 +515,30 @@ function ActivityCarousel() {
 }
 
 function PortfolioPreview({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="portfolio-preview">
       <div className="portfolio-intro">
         <div>
-          <p className="eyebrow">Portfolio d’initiatives</p>
-          <h2>Des idées conçues pour devenir des espaces d’impact.</h2>
+          <p className="eyebrow">{c.portfolioPreview.eyebrow}</p>
+          <h2>{c.portfolioPreview.title}</h2>
         </div>
         <div>
-          <p>
-            Découvrez les formats envisagés par NADI pour analyser, rassembler
-            et faire progresser les ambitions du continent.
-          </p>
+          <p>{c.portfolioPreview.text}</p>
           <Button variant="light" onClick={() => navigate("portfolio")}>
-            Explorer le portfolio
+            {c.portfolioPreview.cta}
           </Button>
         </div>
       </div>
       <div className="portfolio-strip">
-        {portfolioItems.map((item) => (
+        {c.portfolioItems.map((item, index) => (
           <article key={item.number}>
-            <img src={item.image} alt="" loading="lazy" decoding="async" />
+            <img
+              src={portfolioImageList[index]}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
             <div>
               <span>{item.number}</span>
               <p>{item.category}</p>
@@ -624,49 +552,45 @@ function PortfolioPreview({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function Vision({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="vision-band">
       <div className="vision-orbit" />
       <div>
-        <p className="eyebrow">Notre vision pour l’Afrique</p>
-        <h2>Une Afrique où chaque potentiel compte.</h2>
-        <p>
-          Nous croyons en une Afrique capable de transformer ses idées, ses
-          talents et ses ressources en opportunités durables pour toutes et
-          tous.
-        </p>
+        <p className="eyebrow">{c.vision.eyebrow}</p>
+        <h2>{c.vision.title}</h2>
+        <p>{c.vision.text}</p>
         <Button variant="light" onClick={() => navigate("contact")}>
-          Construisons ensemble
+          {c.vision.cta}
         </Button>
       </div>
       <blockquote>
-        “Accelerating Africa’s
+        {c.vision.quoteLine1}
         <br />
-        <em>Inclusive Development.</em>”
+        <em>{c.vision.quoteLine2}</em>
       </blockquote>
     </section>
   )
 }
 
 function Partnerships({ navigate }: { navigate: (page: Page) => void }) {
-  const entries = [
-    ["01", "Devenir partenaire"],
-    ["02", "Participer à nos initiatives"],
-    ["03", "Nous contacter"],
-  ]
+  const { c } = useI18n()
   return (
     <section className="section partnerships">
       <div className="partnership-copy">
         <SectionHeading
-          eyebrow="Partenariats & collaboration"
-          title="Ensemble, donnons de l’élan au développement africain"
-          intro="NADI souhaite favoriser les synergies entre les jeunes, les institutions, les organisations, les chercheurs, les entrepreneurs et les partenaires engagés en faveur du développement inclusif."
+          eyebrow={c.partnerships.eyebrow}
+          title={c.partnerships.title}
+          intro={c.partnerships.intro}
         />
       </div>
       <div className="partnership-links">
-        {entries.map(([number, label]) => (
-          <button key={number} onClick={() => navigate("contact")}>
-            <span>{number}</span>
+        {c.partnerships.entries.map((label, index) => (
+          <button
+            key={label}
+            onClick={() => navigate("contact")}
+          >
+            <span>0{index + 1}</span>
             <strong>{label}</strong>
             <ArrowIcon />
           </button>
@@ -685,8 +609,9 @@ function NewsGrid({
   limit?: number
   filter?: string
 }) {
-  const list = articles
-    .filter((article) => !filter || filter === "Tous" || article.tag === filter)
+  const { c } = useI18n()
+  const list = c.articles
+    .filter((article) => !filter || filter === "all" || article.tagId === filter)
     .slice(0, limit)
   return (
     <div className="article-grid">
@@ -697,14 +622,21 @@ function NewsGrid({
           onClick={() => navigate("news")}
         >
           <div className="article-image">
-            <img src={article.image} alt="" loading="lazy" decoding="async" />
-            <span>Contenu de démonstration</span>
+            <img
+              src={articleImages[c.articles.indexOf(article)]}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <span>{c.news.demoBadge}</span>
           </div>
-          <p className="article-meta">{article.category} · À venir</p>
+          <p className="article-meta">
+            {article.category} · {c.news.metaSuffix}
+          </p>
           <h3>{article.title}</h3>
           <p>{article.excerpt}</p>
           <Button variant="text" onClick={() => navigate("news")}>
-            Lire l’aperçu
+            {c.news.readPreview}
           </Button>
         </article>
       ))}
@@ -713,13 +645,14 @@ function NewsGrid({
 }
 
 function Home({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <>
-      <Ticker />
       <Hero navigate={navigate} />
       <Mission />
       <Approach />
       <LeaderFeature navigate={navigate} />
+      <Ticker />
       <ActivityCarousel />
       <Actions navigate={navigate} />
       <Vision navigate={navigate} />
@@ -728,14 +661,14 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
       <section className="section news-preview">
         <div className="section-topline">
           <SectionHeading
-            eyebrow="Actualités & perspectives"
-            title="Les idées qui font avancer le continent"
+            eyebrow={c.news.eyebrow}
+            title={c.news.title}
           />
           <Button variant="text" onClick={() => navigate("news")}>
-            Voir toutes les publications
+            {c.news.ctaAll}
           </Button>
         </div>
-        <NewsGrid navigate={navigate} limit={3} />
+        <NewsGrid navigate={navigate} limit={3} filter="all" />
       </section>
       <FinalCta navigate={navigate} />
     </>
@@ -761,49 +694,33 @@ function PageHero({
 }
 
 function AboutPage({ navigate }: { navigate: (page: Page) => void }) {
-  const values = [
-    "Inclusion",
-    "Innovation",
-    "Leadership",
-    "Intégrité",
-    "Collaboration",
-    "Impact durable",
-  ]
+  const { c } = useI18n()
   return (
     <>
       <PageHero
-        eyebrow="À propos de NADI"
-        title="Une initiative pour relier les ambitions africaines."
-        intro="NADI se construit comme une plateforme de réflexion, de dialogue et de mise en relation au service d’un développement plus inclusif."
+        eyebrow={c.about.eyebrow}
+        title={c.about.title}
+        intro={c.about.intro}
       />
       <section className="section editorial-split">
         <div>
-          <p className="eyebrow">Notre raison d’être</p>
-          <h2>Créer les conditions d’une transformation partagée</h2>
+          <p className="eyebrow">{c.about.reasonEyebrow}</p>
+          <h2>{c.about.reasonTitle}</h2>
         </div>
         <div className="rich-copy">
-          <p>
-            NOVARA AFRICA DEVELOPMENT INITIATIVE porte une ambition simple :
-            rapprocher les idées, les personnes et les opportunités qui peuvent
-            contribuer à l’avenir du continent.
-          </p>
-          <p>
-            Son approche privilégie l’écoute, l’analyse et la coopération entre
-            générations, disciplines et institutions. NADI entend créer des
-            espaces où les perspectives deviennent des collaborations et où les
-            collaborations peuvent produire un impact durable.
-          </p>
+          <p>{c.about.p1}</p>
+          <p>{c.about.p2}</p>
         </div>
       </section>
       <section className="values-section">
         <SectionHeading
-          eyebrow="Valeurs proposées"
-          title="Les principes qui orientent notre démarche"
-          intro="Ces valeurs expriment l’orientation actuelle de NADI et pourront être précisées avec l’organisation."
+          eyebrow={c.about.valuesEyebrow}
+          title={c.about.valuesTitle}
+          intro={c.about.valuesIntro}
           light
         />
         <div className="values-grid">
-          {values.map((value, index) => (
+          {c.about.values.map((value, index) => (
             <div className="value-item" key={value}>
               <span>0{index + 1}</span>
               <h3>{value}</h3>
@@ -811,51 +728,43 @@ function AboutPage({ navigate }: { navigate: (page: Page) => void }) {
           ))}
         </div>
       </section>
+      <Realisation />
       <FinalCta navigate={navigate} />
     </>
   )
 }
 
 function LeadershipPage({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <>
       <PageHero
-        eyebrow="Le leadership"
-        title="Une vision portée par l’écoute, l’action et l’impact."
-        intro="Fabrice Komlan Séna VIAGBO incarne une génération de leaders africains engagée à transformer les idées en opportunités."
+        eyebrow={c.leadershipPage.eyebrow}
+        title={c.leadershipPage.title}
+        intro={c.leadershipPage.intro}
       />
       <section className="section leadership-page">
         <div className="large-portrait">
           <img
             className="portrait-photo"
             src={media.founder}
-            alt="Portrait de Fabrice Komlan Séna VIAGBO, fondateur de NADI"
+            alt={c.leader.imageAlt}
             loading="lazy"
             decoding="async"
           />
-          <p>Fabrice Komlan Séna VIAGBO · Fondateur de NADI</p>
+          <p>{c.leadershipPage.caption}</p>
         </div>
         <div className="leadership-story">
-          <p className="eyebrow">Portrait</p>
-          <h2>Construire une plateforme au service des possibles</h2>
-          <p>
-            Fabrice Komlan Séna VIAGBO est un jeune leader visionnaire
-            profondément engagé dans le développement de l’Afrique. Ses centres
-            d’intérêt portent notamment sur l’analyse économique, le dialogue
-            sur les politiques publiques et l’autonomisation des jeunes.
-          </p>
-          <p>
-            À travers NADI, il construit une plateforme destinée à connecter les
-            idées, les personnes et les opportunités afin de contribuer à la
-            transformation du continent africain.
-          </p>
+          <p className="eyebrow">{c.leadershipPage.storyEyebrow}</p>
+          <h2>{c.leadershipPage.storyTitle}</h2>
+          <p>{c.leadershipPage.p1}</p>
+          <p>{c.leadershipPage.p2}</p>
           <blockquote>
-            “Le développement inclusif commence lorsque chaque voix peut
-            contribuer à dessiner l’avenir.”
-            <small>— Formulation éditoriale pour la maquette</small>
+            “{c.leadershipPage.quote}”
+            <small>{c.leadershipPage.quoteSmall}</small>
           </blockquote>
           <Button onClick={() => navigate("contact")}>
-            Échanger avec NADI
+            {c.leadershipPage.cta}
           </Button>
         </div>
       </section>
@@ -864,30 +773,27 @@ function LeadershipPage({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function ActionsPage({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <>
       <PageHero
-        eyebrow="Nos axes d’action"
-        title="Trois leviers pour faire progresser les idées et l’action."
-        intro="Des champs de réflexion et de collaboration pensés pour répondre aux transformations économiques et sociales du continent."
+        eyebrow={c.actionsPage.eyebrow}
+        title={c.actionsPage.title}
+        intro={c.actionsPage.intro}
       />
       <section className="section action-list">
-        {actionAreas.map((area) => (
+        {c.actionAreas.map((area) => (
           <article key={area.number}>
             <div className="action-list-number">{area.number}</div>
             <div>
-              <p className="eyebrow">Axe stratégique</p>
+              <p className="eyebrow">{c.actionsPage.axisLabel}</p>
               <h2>{area.title}</h2>
             </div>
             <div className="rich-copy">
               <p>{area.text}</p>
-              <p>
-                L’approche envisagée associe veille, échanges de perspectives et
-                mise en relation d’acteurs concernés. Les formats et
-                collaborations seront développés avec les partenaires de NADI.
-              </p>
+              <p>{c.actionsPage.extra}</p>
               <Button variant="text" onClick={() => navigate("contact")}>
-                Explorer une collaboration
+                {c.actionsPage.cta}
               </Button>
             </div>
           </article>
@@ -898,23 +804,20 @@ function ActionsPage({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function PortfolioPage({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <>
       <PageHero
-        eyebrow="Portfolio d’initiatives"
-        title="Imaginer aujourd’hui les plateformes d’impact de demain."
-        intro="Une sélection de concepts et de formats envisagés pour donner corps à la mission de NADI. Aucun de ces projets n’est présenté comme déjà réalisé."
+        eyebrow={c.portfolioPage.eyebrow}
+        title={c.portfolioPage.title}
+        intro={c.portfolioPage.intro}
       />
       <section className="section portfolio-page">
         <div className="portfolio-notice">
-          <span>Portefeuille prospectif</span>
-          <p>
-            Ces propositions constituent une direction de travail et pourront
-            évoluer avec les partenaires, les publics concernés et les priorités
-            de l’organisation.
-          </p>
+          <span>{c.portfolioPage.noticeLabel}</span>
+          <p>{c.portfolioPage.noticeText}</p>
         </div>
-        {portfolioItems.map((item, index) => (
+        {c.portfolioItems.map((item, index) => (
           <article
             className={
               index % 2 ? "portfolio-project reverse" : "portfolio-project"
@@ -922,7 +825,12 @@ function PortfolioPage({ navigate }: { navigate: (page: Page) => void }) {
             key={item.number}
           >
             <div className="portfolio-project-image">
-              <img src={item.image} alt="" loading="lazy" decoding="async" />
+              <img
+                src={portfolioImageList[index]}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
               <span>{item.number}</span>
             </div>
             <div className="portfolio-project-copy">
@@ -930,11 +838,11 @@ function PortfolioPage({ navigate }: { navigate: (page: Page) => void }) {
               <h2>{item.title}</h2>
               <p>{item.text}</p>
               <div className="project-meta">
-                <span>Statut</span>
-                <strong>Concept à développer</strong>
+                <span>{c.portfolioPage.statusLabel}</span>
+                <strong>{c.portfolioPage.statusValue}</strong>
               </div>
               <Button variant="text" onClick={() => navigate("contact")}>
-                Construire cette initiative avec NADI
+                {c.portfolioPage.cta}
               </Button>
             </div>
           </article>
@@ -946,31 +854,28 @@ function PortfolioPage({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function NewsPage({ navigate }: { navigate: (page: Page) => void }) {
-  const [filter, setFilter] = useState("Tous")
-  const categories = ["Tous", "Économie", "Jeunesse", "Politiques publiques"]
+  const { c } = useI18n()
+  const [filter, setFilter] = useState("all")
   return (
     <>
       <PageHero
-        eyebrow="Actualités & perspectives"
-        title="Un espace pour comprendre, partager et ouvrir le dialogue."
-        intro="Cette page accueillera les analyses, annonces et publications officielles de NADI."
+        eyebrow={c.newsPage.eyebrow}
+        title={c.newsPage.title}
+        intro={c.newsPage.intro}
       />
       <section className="section news-page">
         <div className="demo-notice">
-          <strong>Maquette éditoriale</strong>
-          <span>
-            Les contenus ci-dessous sont des exemples et ne constituent pas des
-            publications officielles.
-          </span>
+          <strong>{c.newsPage.demoTitle}</strong>
+          <span>{c.newsPage.demoText}</span>
         </div>
-        <div className="filters" aria-label="Filtrer les articles">
-          {categories.map((category) => (
+        <div className="filters" aria-label={c.newsPage.filterLabel}>
+          {c.filters.map((category) => (
             <button
-              key={category}
-              className={filter === category ? "active" : ""}
-              onClick={() => setFilter(category)}
+              key={category.id}
+              className={filter === category.id ? "active" : ""}
+              onClick={() => setFilter(category.id)}
             >
-              {category}
+              {category.label}
             </button>
           ))}
         </div>
@@ -981,15 +886,17 @@ function NewsPage({ navigate }: { navigate: (page: Page) => void }) {
 }
 
 function ContactPage() {
+  const { c } = useI18n()
+  const form = c.contactPage.form
   const [status, setStatus] =
     useState<"idle" | "loading" | "success" | "error">("idle")
   const [error, setError] = useState("")
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    if (!form.get("name") || !form.get("email") || !form.get("message")) {
-      setError("Merci de renseigner votre nom, votre e-mail et votre message.")
+    const data = new FormData(event.currentTarget)
+    if (!data.get("name") || !data.get("email") || !data.get("message")) {
+      setError(form.error)
       setStatus("error")
       return
     }
@@ -1001,77 +908,77 @@ function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Entrer en contact"
-        title="Les grandes transformations commencent par une conversation."
-        intro="Parlons partenariat, participation et opportunités de collaboration en faveur du développement inclusif."
+        eyebrow={c.contactPage.eyebrow}
+        title={c.contactPage.title}
+        intro={c.contactPage.intro}
       />
       <section className="section contact-layout">
         <div className="contact-aside">
-          <p className="eyebrow">Écrivez-nous</p>
-          <h2>Construisons des synergies durables.</h2>
-          <p>
-            Les coordonnées officielles et les comptes sociaux de NADI seront
-            affichés ici après leur confirmation.
-          </p>
+          <p className="eyebrow">{c.contactPage.writeEyebrow}</p>
+          <h2>{c.contactPage.writeTitle}</h2>
+          <p>{c.contactPage.writeText}</p>
           <div className="contact-detail">
-            <span>E-mail</span>
-            <strong>À renseigner</strong>
+            <span>{c.contactPage.emailLabel}</span>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </div>
           <div className="contact-detail">
-            <span>Réseaux sociaux</span>
-            <strong>À confirmer</strong>
+            <span>{c.contactPage.phoneLabel}</span>
+            <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+          </div>
+          <div className="contact-detail">
+            <span>{c.contactPage.socialLabel}</span>
+            <strong>{c.contactPage.socialValue}</strong>
           </div>
         </div>
         <form className="contact-form" onSubmit={submit} noValidate>
           <div className="field-row">
             <label>
-              Nom complet *
-              <input name="name" type="text" placeholder="Votre nom" />
+              {form.name}
+              <input name="name" type="text" placeholder={form.namePlaceholder} />
             </label>
             <label>
-              Adresse e-mail *
+              {form.email}
               <input
                 name="email"
                 type="email"
-                placeholder="vous@organisation.org"
+                placeholder={form.emailPlaceholder}
               />
             </label>
           </div>
           <div className="field-row">
             <label>
-              Organisation
+              {form.organisation}
               <input
                 name="organisation"
                 type="text"
-                placeholder="Nom de votre organisation"
+                placeholder={form.organisationPlaceholder}
               />
             </label>
             <label>
-              Sujet
-              <select name="subject" defaultValue="partenariat">
-                <option value="partenariat">Partenariat</option>
-                <option value="collaboration">Collaboration</option>
-                <option value="participation">Participation</option>
-                <option value="general">Demande générale</option>
+              {form.subject}
+              <select name="subject" defaultValue={form.subjects[0].value}>
+                {form.subjects.map((subject) => (
+                  <option value={subject.value} key={subject.value}>
+                    {subject.label}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
           <label>
-            Message *
+            {form.message}
             <textarea
               name="message"
               rows={6}
-              placeholder="Parlez-nous de votre projet ou de votre demande..."
+              placeholder={form.messagePlaceholder}
             />
           </label>
           {status === "error" && <p className="form-message error">{error}</p>}
           {status === "success" && (
-            <p className="form-message success">
-              Merci. Votre demande a bien été simulée dans cette maquette.
-            </p>
+            <p className="form-message success">{form.success}</p>
           )}
           <Button type="submit">
-            {status === "loading" ? "Envoi en cours…" : "Envoyer le message"}
+            {status === "loading" ? form.submitting : form.submit}
           </Button>
         </form>
       </section>
@@ -1081,35 +988,60 @@ function ContactPage() {
 }
 
 function FinalCta({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <section className="final-cta">
-      <p className="eyebrow">Notre ambition commune</p>
-      <h2>L’avenir de l’Afrique se construit ensemble.</h2>
-      <p>
-        Connectons les idées, les talents et les opportunités pour accélérer un
-        développement plus inclusif.
-      </p>
-      <Button onClick={() => navigate("contact")}>
-        Entrer en contact avec NADI
-      </Button>
+      <p className="eyebrow">{c.finalCta.eyebrow}</p>
+      <h2>{c.finalCta.title}</h2>
+      <p>{c.finalCta.text}</p>
+      <Button onClick={() => navigate("contact")}>{c.finalCta.cta}</Button>
+    </section>
+  )
+}
+
+function Realisation() {
+  const { c } = useI18n()
+  return (
+    <section className="section realisation">
+      <div className="realisation-copy">
+        <p className="eyebrow">{c.realisation.eyebrow}</p>
+        <h2>{c.realisation.title}</h2>
+        <p className="realisation-intro">{c.realisation.intro}</p>
+        <div className="realisation-person">
+          <strong>{c.realisation.name}</strong>
+          <span>{c.realisation.role}</span>
+        </div>
+        <p className="realisation-note">{c.realisation.note}</p>
+      </div>
+      <div className="realisation-gallery">
+        {responsableImages.map((image, index) => (
+          <figure className="realisation-photo" key={image}>
+            <img
+              src={image}
+              alt={`${c.realisation.imageAlt} ${index + 1}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        ))}
+      </div>
     </section>
   )
 }
 
 function Footer({ navigate }: { navigate: (page: Page) => void }) {
+  const { c } = useI18n()
   return (
     <footer className="footer">
       <div className="footer-top">
         <div>
           <Brand light />
-          <p className="footer-tagline">
-            Accelerating Africa’s Inclusive Development.
-          </p>
+          <p className="footer-tagline">{c.footer.tagline}</p>
           <Newsletter />
         </div>
         <div>
-          <p className="footer-label">Navigation</p>
-          {pages.slice(0, 5).map((page) => (
+          <p className="footer-label">{c.footer.navLabel}</p>
+          {pageOrder.slice(0, 5).map((page) => (
             <a
               key={page.id}
               href={`#/${page.id}`}
@@ -1118,12 +1050,12 @@ function Footer({ navigate }: { navigate: (page: Page) => void }) {
                 navigate(page.id)
               }}
             >
-              {page.label}
+              {c.nav[page.key]}
             </a>
           ))}
         </div>
         <div>
-          <p className="footer-label">Nous rejoindre</p>
+          <p className="footer-label">{c.footer.joinLabel}</p>
           <a
             href="#/contact"
             onClick={(event) => {
@@ -1131,35 +1063,25 @@ function Footer({ navigate }: { navigate: (page: Page) => void }) {
               navigate("contact")
             }}
           >
-            Collaborer avec NADI
+            {c.footer.collaborate}
           </a>
-          <span>E-mail officiel à renseigner</span>
-          <span>Réseaux sociaux à confirmer</span>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+          <span>{c.contactPage.socialValue}</span>
         </div>
       </div>
       <div className="footer-bottom">
-        <span>
-          © {new Date().getFullYear()} NOVARA AFRICA DEVELOPMENT INITIATIVE
-        </span>
-        <span>Développement inclusif · Leadership · Collaboration</span>
+        <span>© {new Date().getFullYear()} NADI</span>
+        <span>{c.footer.credit}</span>
+        <span>{c.footer.keywords}</span>
       </div>
     </footer>
   )
 }
 
-const focusAreas = [
-  "Analyse économique",
-  "Dialogue sur les politiques publiques",
-  "Autonomisation des jeunes",
-  "Leadership",
-  "Inclusion",
-  "Innovation",
-  "Collaboration",
-  "Impact durable",
-]
-
 function Ticker() {
-  const items = [...focusAreas, ...focusAreas]
+  const { c } = useI18n()
+  const items = [...c.ticker, ...c.ticker]
   return (
     <div className="ticker" aria-hidden="true">
       <div className="ticker-track">
@@ -1174,42 +1096,20 @@ function Ticker() {
   )
 }
 
-const approachSteps = [
-  {
-    index: "01",
-    title: "Écouter",
-    text: "Comprendre les réalités, les attentes et les ambitions des acteurs engagés pour le développement de l’Afrique.",
-  },
-  {
-    index: "02",
-    title: "Analyser",
-    text: "Produire des perspectives claires et honnêtes sur les enjeux économiques et sociaux du continent.",
-  },
-  {
-    index: "03",
-    title: "Connecter",
-    text: "Rapprocher les idées, les talents, les institutions et les opportunités qui peuvent faire avancer les projets.",
-  },
-  {
-    index: "04",
-    title: "Agir",
-    text: "Transformer les constats et les rencontres en initiatives utiles, durables et inclusives.",
-  },
-]
-
 function Approach() {
+  const { c } = useI18n()
   return (
     <section className="section approach" id="approach">
       <div className="approach-head">
         <SectionHeading
-          eyebrow="Notre méthode"
-          title="Une démarche en quatre mouvements."
-          intro="Une manière de travailler calme, exigeante et tournée vers l’impact : écouter avant de penser, penser avant d’agir."
+          eyebrow={c.approach.eyebrow}
+          title={c.approach.title}
+          intro={c.approach.intro}
         />
-        <span className="approach-seal">NADI</span>
+        <span className="approach-seal">{c.approach.seal}</span>
       </div>
       <div className="approach-grid">
-        {approachSteps.map((step) => (
+        {c.approach.steps.map((step) => (
           <article className="approach-card" key={step.index}>
             <div className="approach-index">{step.index}</div>
             <h3>{step.title}</h3>
@@ -1221,55 +1121,30 @@ function Approach() {
   )
 }
 
-const faqEntries = [
-  {
-    question: "Comment collaborer avec NADI ?",
-    answer:
-      "Écrivez-nous via le formulaire de contact en précisant votre organisation et votre domaine d’intérêt. Nous étudions chaque proposition de partenariat, de participation ou de coconstruction.",
-  },
-  {
-    question: "NADI publie-t-il déjà des analyses ?",
-    answer:
-      "L’espace « Actualités & perspectives » est une maquette éditoriale. Les publications officielles, annonces et comptes rendus seront intégrés dès que l’organisation entre en activité.",
-  },
-  {
-    question: "Quels domaines NADI couvre-t-il ?",
-    answer:
-      "Trois axes principaux : l’analyse économique, le dialogue sur les politiques publiques et l’autonomisation des jeunes.",
-  },
-  {
-    question: "Puis-je proposer une idée ou un format d’initiative ?",
-    answer:
-      "Oui. NADI souhaite favoriser les synergies entre les jeunes, les institutions, les chercheurs, les entrepreneurs et les partenaires. Présentez votre idée via le formulaire de contact.",
-  },
-]
-
 function Faq() {
+  const { c } = useI18n()
   const [openIndex, setOpenIndex] = useState(0)
   return (
     <section className="section faq">
       <div className="section-topline">
-        <SectionHeading
-          eyebrow="Questions fréquentes"
-          title="Ce qu’il est utile de savoir."
-        />
+        <SectionHeading eyebrow={c.faq.eyebrow} title={c.faq.title} />
       </div>
       <div className="faq-list">
-        {faqEntries.map((entry, index) => (
+        {c.faq.entries.map((entry, index) => (
           <div
             className={`faq-item ${openIndex === index ? "open" : ""}`}
-            key={entry.question}
+            key={entry.q}
           >
             <button
               className="faq-q"
               onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
               aria-expanded={openIndex === index}
             >
-              {entry.question}
+              {entry.q}
               <span aria-hidden="true">+</span>
             </button>
             <div className="faq-a">
-              <p>{entry.answer}</p>
+              <p>{entry.a}</p>
             </div>
           </div>
         ))}
@@ -1279,41 +1154,35 @@ function Faq() {
 }
 
 function Newsletter() {
+  const { c } = useI18n()
   const [message, setMessage] = useState<null | "ok" | "error">(null)
   function subscribe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const email = new FormData(event.currentTarget).get("newsletter-email")
-    setMessage(
-      email && String(email).includes("@") ? "ok" : "error",
-    )
+    setMessage(email && String(email).includes("@") ? "ok" : "error")
   }
   return (
     <div className="newsletter">
-      <p className="footer-label">Rester informé</p>
-      <p className="newsletter-intro">
-        Recevez un aperçu des analyses et rendez-vous de NADI, une fois par
-        mois.
-      </p>
+      <p className="footer-label">{c.footer.stayLabel}</p>
+      <p className="newsletter-intro">{c.footer.newsletterIntro}</p>
       <form className="newsletter-form" onSubmit={subscribe} noValidate>
         <input
           className="newsletter-input"
           name="newsletter-email"
           type="email"
-          placeholder="votre@email.org"
-          aria-label="Adresse e-mail"
+          placeholder={c.footer.newsletterPlaceholder}
+          aria-label={c.footer.newsletterAria}
         />
         <button className="newsletter-submit" type="submit">
-          S’inscrire
+          {c.footer.subscribe}
         </button>
       </form>
       {message === "ok" && (
-        <p className="newsletter-message">
-          Merci — votre inscription a bien été simulée dans cette maquette.
-        </p>
+        <p className="newsletter-message">{c.footer.newsletterOk}</p>
       )}
       {message === "error" && (
         <p className="newsletter-message error">
-          Merci de saisir une adresse e-mail valide.
+          {c.footer.newsletterError}
         </p>
       )}
     </div>
@@ -1345,6 +1214,7 @@ function ScrollProgress() {
 }
 
 function BackToTop() {
+  const { c } = useI18n()
   const [show, setShow] = useState(false)
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 640)
@@ -1356,7 +1226,7 @@ function BackToTop() {
     <button
       className={`to-top ${show ? "show" : ""}`}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      aria-label="Revenir en haut de la page"
+      aria-label={c.misc.backToTop}
     >
       <ArrowIcon />
     </button>
@@ -1364,11 +1234,12 @@ function BackToTop() {
 }
 
 export default function App() {
+  const { lang } = useI18n()
   const initialPage = (
     window.location.hash.replace("#/", "") || "home"
   ) as Page
   const [currentPage, setCurrentPage] = useState<Page>(
-    pages.some((page) => page.id === initialPage) ? initialPage : "home",
+    pageIds.includes(initialPage) ? initialPage : "home",
   )
   const [introDone, setIntroDone] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -1383,7 +1254,7 @@ export default function App() {
   useEffect(() => {
     const onHashChange = () => {
       const page = window.location.hash.replace("#/", "") as Page
-      if (pages.some((item) => item.id === page)) setCurrentPage(page)
+      if (pageIds.includes(page)) setCurrentPage(page)
     }
     window.addEventListener("hashchange", onHashChange)
     return () => window.removeEventListener("hashchange", onHashChange)
@@ -1413,7 +1284,7 @@ export default function App() {
     )
     elements.forEach((element) => observer.observe(element))
     return () => observer.disconnect()
-  }, [currentPage])
+  }, [currentPage, lang])
 
   return (
     <div className="app">

@@ -1312,6 +1312,16 @@ h3 {
   color: var(--muted);
 }
 
+.contact-detail a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-detail a:hover {
+  color: var(--gold-dark);
+}
+
 .contact-form {
   padding: 45px;
   background: var(--cream);
@@ -1406,7 +1416,8 @@ h3 {
 }
 
 .footer-top button,
-.footer-top > div > span {
+.footer-top > div > span,
+.footer-top > div > a {
   display: block;
   margin: 10px 0;
   padding: 0;
@@ -1415,9 +1426,11 @@ h3 {
   color: #bab8b2;
   font-size: 13px;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.footer-top button:hover {
+.footer-top button:hover,
+.footer-top > div > a:hover {
   color: var(--white);
 }
 
@@ -2457,6 +2470,47 @@ button:focus-visible {
   height: clamp(32px, 4vw, 42px);
 }
 
+/* Language switcher */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: 14px;
+  margin-left: 4px;
+  border-left: 1px solid var(--line);
+}
+
+.lang-switch button {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.lang-switch button:hover {
+  color: var(--ink);
+}
+
+.lang-switch button.active {
+  background: var(--ink);
+  color: var(--white);
+}
+
+@media (max-width: 1050px) {
+  .nav .lang-switch {
+    padding-left: 0;
+    margin-left: 0;
+    border-left: 0;
+    margin-top: 10px;
+  }
+}
+
 /* Founder portrait photo */
 .portrait-photo {
   min-height: 600px;
@@ -2511,4 +2565,98 @@ button:focus-visible {
 .intro-skip:hover {
   background: rgb(200 154 36 / 18%);
   border-color: var(--gold);
+}
+
+/* Conception & réalisation */
+.realisation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 8vw;
+  border-top: 1px solid var(--line);
+}
+
+.realisation-intro {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.realisation-person {
+  margin: 34px 0;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.realisation-person strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.realisation-person span {
+  color: var(--gold-dark);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.realisation-note {
+  max-width: 520px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.realisation-gallery {
+  display: grid;
+  height: 620px;
+  grid-template-columns: 1.25fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+}
+
+.realisation-photo {
+  margin: 0;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.realisation-photo:first-child {
+  grid-row: span 2;
+}
+
+.realisation-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+@media (max-width: 1050px) {
+  .realisation {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .realisation-gallery {
+    height: 520px;
+  }
+}
+
+@media (max-width: 640px) {
+  .realisation-gallery {
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .realisation-photo,
+  .realisation-photo:first-child {
+    grid-row: auto;
+    height: 380px;
+  }
 }
