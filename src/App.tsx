@@ -644,12 +644,12 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
   return (
     <>
       <Hero navigate={navigate} />
-      <Mission />
       <Ticker />
+      <Mission />
       <LeaderFeature navigate={navigate} />
+      <ActivityCarousel />
       <Approach />
       <Realisation />
-      <ActivityCarousel />
       <Actions navigate={navigate} />
       <Vision navigate={navigate} />
       <PortfolioPreview navigate={navigate} />
