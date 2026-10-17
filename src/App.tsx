@@ -643,8 +643,8 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
   const { c } = useI18n()
   return (
     <>
-      <Hero navigate={navigate} />
       <Ticker />
+      <Hero navigate={navigate} />
       <Mission />
       <LeaderFeature navigate={navigate} />
       <ActivityCarousel />
