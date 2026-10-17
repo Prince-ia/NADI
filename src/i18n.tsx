@@ -403,14 +403,14 @@ const fr = {
     ],
   },
   realisation: {
-    eyebrow: "Design & development",
-    title: "Un partenaire technique : ATF.",
+    eyebrow: "Transformation digitale & accompagnement des jeunes",
+    title: "LAWSON Prince",
     intro:
-      "ATF accompagne NADI en apportant une direction technique et une expertise digitale au service de l’initiative.",
+      "Homme de foi, LAWSON Prince accompagne NADI dans sa transformation digitale. Il intervient également dans la formation digitale et aide les jeunes start-ups à démarrer en mettant à profit son expertise technique pour transformer des idées en projets viables.",
     name: "LAWSON Prince",
     role: "Directeur technique & Développement digital · ATF",
-    note: "Animé par la rigueur et le sens de l’objectif, LAWSON Prince met son savoir-faire au service des ambitions de NADI.",
-    imageAlt: "LAWSON Prince, directeur technique d’ATF, partenaire technique de NADI",
+    note: "Son engagement permet d’équiper les jeunes entrepreneurs d’outils numériques pour bâtir, se développer et créer un impact durable.",
+    imageAlt: "LAWSON Prince, directeur technique d’ATF et partenaire pour la transformation digitale de NADI",
   },
   intro: { skip: "Entrer sur le site" },
   misc: {
@@ -804,14 +804,14 @@ const en: Content = {
     ],
   },
   realisation: {
-    eyebrow: "Design & development",
-    title: "A technical partner: ATF.",
+    eyebrow: "Digital transformation & youth support",
+    title: "LAWSON Prince",
     intro:
-      "ATF works alongside NADI to provide technical direction and digital expertise in support of the initiative.",
+      "LAWSON Prince is a man of faith who supports NADI in its digital transformation journey. He accompanies NADI in digital training initiatives and helps young startups get off the ground by leveraging his technical expertise to turn ideas into viable projects.",
     name: "LAWSON Prince",
     role: "Technical Director & Digital Development · ATF",
-    note: "Driven by precision and purpose, LAWSON Prince contributes his expertise to help NADI reach its objectives.",
-    imageAlt: "LAWSON Prince, technical director at ATF, NADI technical partner",
+    note: "His commitment helps equip young entrepreneurs with the digital tools they need to build, scale and create lasting impact.",
+    imageAlt: "LAWSON Prince, technical director at ATF and digital transformation partner of NADI",
   },
   intro: { skip: "Enter the website" },
   misc: {
@@ -1203,14 +1203,14 @@ const es: Content = {
     ],
   },
   realisation: {
-    eyebrow: "Diseño y desarrollo",
-    title: "Un socio técnico: ATF.",
+    eyebrow: "Transformación digital y apoyo a los jóvenes",
+    title: "LAWSON Prince",
     intro:
-      "ATF acompaña a NADI aportando dirección técnica y experiencia digital al servicio de la iniciativa.",
+      "Hombre de fe, LAWSON Prince acompaña a NADI en su transformación digital. También interviene en la formación digital y ayuda a las jóvenes startups a iniciar su actividad aprovechando su experiencia técnica para transformar ideas en proyectos viables.",
     name: "LAWSON Prince",
     role: "Director técnico y Desarrollo digital · ATF",
-    note: "Guiado por la precisión y el objetivo, LAWSON Prince pone su experiencia al servicio de las ambiciones de NADI.",
-    imageAlt: "LAWSON Prince, director técnico de ATF, socio técnico de NADI",
+    note: "Su compromiso permite dotar a los jóvenes emprendedores de herramientas digitales para construir, crecer y generar un impacto duradero.",
+    imageAlt: "LAWSON Prince, director técnico de ATF y socio para la transformación digital de NADI",
   },
   intro: { skip: "Entrar en el sitio" },
   misc: {
@@ -1600,14 +1600,14 @@ const ee: Content = {
     ],
   },
   realisation: {
-    eyebrow: "Dɔwɔwɔ kple dzidzigbɔɖiɖi",
-    title: "Dɔwɔɖekae ƒe hadɔwɔla: ATF.",
+    eyebrow: "Digital trɔtrɔ kple ɖekakpuwo ƒe kpekpeɖeŋu",
+    title: "LAWSON Prince",
     intro:
-      "ATF kpena ɖe NADI ŋu le mɔfiame kple digital nunya dzi le dɔ sia ƒe ŋuti.",
+      "Xɔse ƒe ame, LAWSON Prince kpena ɖe NADI ŋu le eƒe digital trɔtrɔ me. Edea ha kple digital ŋgɔyiyi kple ɖekakpuwo ƒe startups ɖe dɔ gɔme to eƒe nunya zazã me be wòatrɔ susuwo wɔ dɔ siwo ate ŋu anɔ anyi.",
     name: "LAWSON Prince",
     role: "Technique ƒe Dzikpɔla & Digital Dɔwɔwɔ · ATF",
-    note: "LAWSON Prince tsɔa eƒe nunya ɖoa NADI ƒe ɖoɖoɖomakpɔmakpɔwo ŋu.",
-    imageAlt: "LAWSON Prince, ATF ƒe technique dzikpɔla, NADI ƒe hadɔwɔla",
+    note: "Eƒe kpekpeɖeŋu nana ɖekakpuwo ƒe asitsalawo kpɔa digital dɔwɔnuwo hena tu, tsitsim kple viwɔwɔ.",
+    imageAlt: "LAWSON Prince, ATF ƒe technique dzikpɔla kple NADI ƒe digital trɔtrɔ ƒe hadɔwɔla",
   },
   intro: { skip: "Ge ɖe site la me" },
   misc: {

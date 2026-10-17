@@ -645,10 +645,10 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
     <>
       <Hero navigate={navigate} />
       <Mission />
-      <Approach />
-      <LeaderFeature navigate={navigate} />
-      <Realisation />
       <Ticker />
+      <LeaderFeature navigate={navigate} />
+      <Approach />
+      <Realisation />
       <ActivityCarousel />
       <Actions navigate={navigate} />
       <Vision navigate={navigate} />
@@ -666,8 +666,6 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
         </div>
         <NewsGrid navigate={navigate} limit={3} filter="all" />
       </section>
-      <LeaderFeature navigate={navigate} />
-      <Realisation />
       <FinalCta navigate={navigate} />
     </>
   )
