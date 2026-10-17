@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import type { FormEvent, ReactNode } from "react"
 
 type Page =
@@ -10,13 +10,28 @@ type Page =
   | "news"
   | "contact"
 
-const heroImage =
-  "https://images.unsplash.com/photo-1655720348590-c739c860beed?auto=format&fit=crop&w=1600&q=85"
-const articleImages = [
-  "https://images.unsplash.com/photo-1549086802-bb458f399f05?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1584365098838-50ccef838f4a?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1573496528298-f0e9d3c7ce55?auto=format&fit=crop&w=1000&q=80",
+const media = {
+  logo: "media/logo.png",
+  logoLight: "media/logo-2.png",
+  video: "media/video-logo.mp4",
+  videoPoster: "media/video-logo-poster.jpg",
+  founder: "media/fondateur.jpg",
+}
+
+const activityImages = [
+  "media/activite-1.jpg",
+  "media/activite-2.jpg",
+  "media/activite-3.jpg",
+  "media/activite-4.jpg",
+  "media/activite-5.jpg",
+  "media/activite-6.jpg",
+  "media/activite-7.jpg",
+  "media/activite-8.jpg",
+  "media/activite-9.jpg",
 ]
+
+const heroImage = activityImages[0]
+const articleImages = [activityImages[1], activityImages[2], activityImages[3]]
 
 const pages: { id: Page; label: string }[] = [
   { id: "home", label: "Accueil" },
@@ -99,29 +114,25 @@ const activities = [
     kicker: "Réflexion collective",
     title: "Ateliers d’idées et d’innovation",
     text: "Des formats participatifs pour croiser les expertises, faire émerger des perspectives et transformer les constats en pistes d’action.",
-    image:
-      "https://images.unsplash.com/photo-1720700126957-769e2f2fc0fc?auto=format&fit=crop&w=1600&q=85",
+    image: activityImages[4],
   },
   {
     kicker: "Dialogue",
     title: "Rencontres et conversations publiques",
     text: "Des espaces exigeants et accessibles pour rapprocher les décideurs, les chercheurs, les entrepreneurs et la jeunesse.",
-    image:
-      "https://images.unsplash.com/photo-1751139846255-d0d65f3d192a?auto=format&fit=crop&w=1600&q=85",
+    image: activityImages[5],
   },
   {
     kicker: "Transmission",
     title: "Leadership et montée en compétence",
     text: "Des expériences pensées pour renforcer la confiance, la capacité d’initiative et le pouvoir d’agir des jeunes talents.",
-    image:
-      "https://images.unsplash.com/photo-1562910859-be83f1df7b56?auto=format&fit=crop&w=1600&q=85",
+    image: activityImages[6],
   },
   {
     kicker: "Rayonnement",
     title: "Forums et rendez-vous panafricains",
     text: "Des temps forts pour partager les connaissances et ouvrir de nouvelles possibilités de collaboration à l’échelle du continent.",
-    image:
-      "https://images.unsplash.com/photo-1778876091112-f7e985acdb01?auto=format&fit=crop&w=1600&q=85",
+    image: activityImages[7],
   },
 ]
 
@@ -131,24 +142,21 @@ const portfolioItems = [
     category: "Économie & innovation",
     title: "Observatoire des opportunités africaines",
     text: "Un concept de veille et d’analyse pour rendre les dynamiques économiques plus lisibles.",
-    image:
-      "https://images.unsplash.com/photo-1742339879400-04cae8a582a6?auto=format&fit=crop&w=1200&q=85",
+    image: activityImages[8],
   },
   {
     number: "02",
     category: "Jeunesse & leadership",
     title: "NADI Next Generation Forum",
     text: "Un format envisagé pour connecter les jeunes talents aux idées, outils et réseaux qui accélèrent leur impact.",
-    image:
-      "https://images.unsplash.com/photo-1720700126947-a6ba1ebba73d?auto=format&fit=crop&w=1200&q=85",
+    image: activityImages[1],
   },
   {
     number: "03",
     category: "Politiques publiques",
     title: "Conversations pour l’Afrique",
     text: "Une série éditoriale et événementielle imaginée pour nourrir un dialogue constructif et pluraliste.",
-    image:
-      "https://images.unsplash.com/photo-1766131822552-59074d945365?auto=format&fit=crop&w=1200&q=85",
+    image: activityImages[5],
   },
 ]
 
@@ -163,6 +171,13 @@ function ArrowIcon() {
 function Brand({ light = false }: { light?: boolean }) {
   return (
     <div className={`brand ${light ? "brand-light" : ""}`} aria-label="NADI">
+      <img
+        className="brand-logo"
+        src={light ? media.logoLight : media.logo}
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+      />
       <span className="brand-name">NADI</span>
       <span className="brand-rule" />
       <span className="brand-full">
@@ -170,6 +185,54 @@ function Brand({ light = false }: { light?: boolean }) {
         <br />
         Development Initiative
       </span>
+    </div>
+  )
+}
+
+function IntroSplash({ onDone }: { onDone: () => void }) {
+  const [leaving, setLeaving] = useState(false)
+  const finished = useRef(false)
+
+  const finish = useCallback(() => {
+    if (finished.current) return
+    finished.current = true
+    setLeaving(true)
+    window.setTimeout(onDone, 900)
+  }, [onDone])
+
+  useEffect(() => {
+    const previous = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [])
+
+  useEffect(() => {
+    const timer = window.setTimeout(finish, 9000)
+    return () => window.clearTimeout(timer)
+  }, [finish])
+
+  return (
+    <div
+      className={`intro ${leaving ? "intro-leaving" : ""}`}
+      role="dialog"
+      aria-label="Animation d’ouverture NADI"
+    >
+      <video
+        className="intro-video"
+        src={media.video}
+        poster={media.videoPoster}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        onEnded={finish}
+        onError={finish}
+      />
+      <button className="intro-skip" onClick={finish} type="button">
+        Entrer sur le site
+      </button>
     </div>
   )
 }
@@ -386,10 +449,13 @@ function LeaderFeature({ navigate }: { navigate: (page: Page) => void }) {
   return (
     <section className="leader-feature">
       <div className="leader-portrait">
-        <div className="portrait-placeholder">
-          <span>FKSV</span>
-          <small>Portrait officiel à intégrer</small>
-        </div>
+        <img
+          className="portrait-photo"
+          src={media.founder}
+          alt="Portrait de Fabrice Komlan Séna VIAGBO, fondateur de NADI"
+          loading="lazy"
+          decoding="async"
+        />
         <div className="portrait-caption">
           <strong>Fabrice Komlan Séna VIAGBO</strong>
           <span>Fondateur · NADI</span>
@@ -760,10 +826,13 @@ function LeadershipPage({ navigate }: { navigate: (page: Page) => void }) {
       />
       <section className="section leadership-page">
         <div className="large-portrait">
-          <div className="portrait-placeholder">
-            <span>FKSV</span>
-            <small>Portrait officiel à intégrer</small>
-          </div>
+          <img
+            className="portrait-photo"
+            src={media.founder}
+            alt="Portrait de Fabrice Komlan Séna VIAGBO, fondateur de NADI"
+            loading="lazy"
+            decoding="async"
+          />
           <p>Fabrice Komlan Séna VIAGBO · Fondateur de NADI</p>
         </div>
         <div className="leadership-story">
@@ -1301,6 +1370,9 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>(
     pages.some((page) => page.id === initialPage) ? initialPage : "home",
   )
+  const [introDone, setIntroDone] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  )
 
   function navigate(page: Page) {
     setCurrentPage(page)
@@ -1345,6 +1417,7 @@ export default function App() {
 
   return (
     <div className="app">
+      {!introDone && <IntroSplash onDone={() => setIntroDone(true)} />}
       <ScrollProgress />
       <Header currentPage={currentPage} navigate={navigate} />
       <main>

@@ -3,6 +3,8 @@ dist
 dist-ssr
 *.local
 
+nadi image/
+
 .env
 .env.*
 !.env.example
