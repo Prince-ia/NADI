@@ -89,7 +89,7 @@ h3 {
   position: sticky;
   z-index: 50;
   top: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-bottom: 0;
   background: color-mix(in srgb, var(--white) 94%, transparent);
   backdrop-filter: blur(18px);
 }
@@ -1525,6 +1525,10 @@ h3 {
     height: 74px;
   }
 
+  .ticker {
+    top: 74px;
+  }
+
   .nav {
     top: 74px;
     padding-right: 20px;
@@ -1860,9 +1864,8 @@ button:focus-visible {
 }
 
 .header-scrolled {
-  border-bottom-color: transparent;
   background: color-mix(in srgb, var(--white) 88%, transparent);
-  box-shadow: 0 18px 50px -28px rgb(23 23 23 / 28%);
+  box-shadow: 0 10px 40px -24px rgb(23 23 23 / 28%);
 }
 
 /* --- Barre de progression du scroll --- */
@@ -2105,9 +2108,13 @@ button:focus-visible {
 
 /* --- Ticker (bandeau défilant) --- */
 .ticker {
+  position: sticky;
+  top: 84px;
+  z-index: 40;
   overflow: hidden;
   padding: 14px 0;
-  border-block: 1px solid rgb(200 154 36 / 26%);
+  border-top: 0;
+  border-bottom: 1px solid rgb(200 154 36 / 26%);
   background: var(--ink);
 }
 
